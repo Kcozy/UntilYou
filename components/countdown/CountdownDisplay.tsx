@@ -5,7 +5,6 @@ import { useCountdown } from "@/hooks/useCountdown";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { padTwo } from "@/lib/countdown";
 import { CountdownDigit } from "./CountdownDigit";
-import { ProgressBar } from "./ProgressBar";
 
 interface CountdownDisplayProps {
   targetTimestamp: number;
@@ -61,8 +60,6 @@ export function CountdownDisplay({
         <CountdownDigit value={padTwo(seconds)} label="seconds" />
       </div>
 
-      {/* Progress bar */}
-      <ProgressBar percent={percentComplete} />
     </motion.div>
   );
 }
