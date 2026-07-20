@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { useEffect } from "react";
 import { useCountdown } from "@/hooks/useCountdown";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { padTwo } from "@/lib/countdown";
@@ -22,10 +23,11 @@ export function CountdownDisplay({
   const prefersReduced = useReducedMotion();
 
   // Fire onComplete callback when countdown hits zero
-  if (isComplete && onComplete) {
-    // Use setTimeout to avoid calling during render
-    setTimeout(onComplete, 0);
-  }
+  useEffect(() => {
+    if (isComplete && onComplete) {
+      onComplete();
+    }
+  }, [isComplete, onComplete]);
 
   // Screen reader text
   const srText = isComplete
