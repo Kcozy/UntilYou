@@ -1,26 +1,168 @@
 @import "tailwindcss";
 
+/* Custom Design Tokens */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Colors - Day Mode */
+  --cream: #faf6f0;
+  --warm-white: #fff8f2;
+  --dusty-rose: #c4a08a;
+  --muted-rose: #d4a090;
+  --blush: #e8c4b8;
+  --charcoal: #2c2825;
+  --soft-charcoal: #5c5652;
+  --whisper: #e8e2da;
+
+  /* Colors - Night Mode */
+  --night-bg: #1a1714;
+  --night-surface: #2a2520;
+  --night-text: #e8dfd4;
+  --night-muted: #8a8078;
+
+  /* Time-of-day backgrounds */
+  --bg-sunrise-start: #ffe8d6;
+  --bg-sunrise-end: #faf6f0;
+  --bg-day: #faf6f0;
+  --bg-sunset-start: #faf6f0;
+  --bg-sunset-end: #e8c4b8;
+  --bg-night-start: #1a1714;
+  --bg-night-end: #2a2520;
+
+  /* Active theme (set by JS) */
+  --bg-primary: var(--cream);
+  --bg-secondary: var(--warm-white);
+  --text-primary: var(--charcoal);
+  --text-secondary: var(--soft-charcoal);
+  --accent: var(--dusty-rose);
+  --accent-soft: var(--blush);
+  --border: var(--whisper);
+
+  /* Typography */
+  --font-heading: "Cormorant Garamond", serif;
+  --font-body: "Inter", sans-serif;
+
+  /* Transitions */
+  --transition-theme: background-color 2s ease, color 2s ease;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Night mode overrides */
+[data-theme="night"] {
+  --bg-primary: var(--night-bg);
+  --bg-secondary: var(--night-surface);
+  --text-primary: var(--night-text);
+  --text-secondary: var(--night-muted);
+  --accent: var(--muted-rose);
+  --accent-soft: #3a3530;
+  --border: #3a3530;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base styles */
+html,
+body {
+  height: 100%;
+  overflow-x: hidden;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  transition: var(--transition-theme);
+}
+
+/* Film grain overlay */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* Breathing animation */
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Heartbeat animation */
+@keyframes heartbeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(1.15);
+  }
+  20% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.15);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* Star twinkle */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Floating particles */
+@keyframes float-up {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(20px);
+    opacity: 0;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .grain-overlay {
+    display: none;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 3px;
 }
