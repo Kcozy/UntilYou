@@ -32,6 +32,8 @@ interface HomePageProps {
   title: string;
   subtitle: string;
   youtubeUrl: string;
+  locationUrl?: string;
+  completionMessage?: string;
 }
 
 export function HomePage({
@@ -40,6 +42,8 @@ export function HomePage({
   title,
   subtitle,
   youtubeUrl,
+  locationUrl,
+  completionMessage,
 }: HomePageProps) {
   const prefersReduced = useReducedMotion();
   useTheme();
@@ -121,6 +125,44 @@ export function HomePage({
             createdTimestamp={createdTimestamp}
             onComplete={handleComplete}
           />
+
+          {/* Completion State (Map & Message) */}
+          {countdownComplete && (
+            <motion.div
+              className="flex flex-col items-center gap-6 w-full max-w-xl mt-2"
+              initial={prefersReduced ? false : { opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+            >
+              {completionMessage && (
+                <h2
+                  className="text-center"
+                  style={{
+                    fontFamily: "var(--font-cormorant)",
+                    fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)",
+                    fontWeight: 300,
+                    color: "var(--text-primary)",
+                    lineHeight: 1.4,
+                  }}
+                >
+                  {completionMessage}
+                </h2>
+              )}
+              {locationUrl && (
+                <div className="w-full aspect-video rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[#E8E2DA] relative">
+                  <iframe
+                    src={locationUrl}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen={false}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                </div>
+              )}
+            </motion.div>
+          )}
 
           {/* Micro-message */}
           <motion.div

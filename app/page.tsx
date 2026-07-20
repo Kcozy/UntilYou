@@ -3,8 +3,14 @@ import { HomePage } from "@/components/HomePage";
 
 export const dynamic = "force-dynamic"; // Always fetch fresh config
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const config = await getConfig();
+  const search = await searchParams;
+  const isDemo = search.demo === 'true';
 
   if (!config) {
     return (
@@ -40,7 +46,9 @@ export default async function Page() {
     );
   }
 
-  const targetTimestamp = computeTargetTimestamp(config);
+  const actualTargetTimestamp = computeTargetTimestamp(config);
+  // If demo mode is active, set the target timestamp to the past to force completion
+  const targetTimestamp = isDemo ? Date.now() - 10000 : actualTargetTimestamp;
   const createdTimestamp = new Date(config.createdAt).getTime();
 
   return (
@@ -50,6 +58,8 @@ export default async function Page() {
       title={config.title}
       subtitle={config.subtitle}
       youtubeUrl={config.youtubeUrl}
+      locationUrl={config.locationUrl}
+      completionMessage={config.completionMessage}
     />
   );
 }

@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { targetDate, targetTime, timezone, title, subtitle, youtubeUrl } =
+    const { targetDate, targetTime, timezone, title, subtitle, youtubeUrl, locationUrl, completionMessage } =
       body;
 
     // Validate required fields
@@ -75,6 +75,8 @@ export async function POST(request: Request) {
       title: title || "Until I can finally hug you again.",
       subtitle: subtitle || "",
       youtubeUrl: youtubeUrl || "",
+      locationUrl: locationUrl || "",
+      completionMessage: completionMessage || "",
     };
 
     const saved = await saveConfig(input);

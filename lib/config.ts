@@ -8,6 +8,8 @@ export interface CountdownConfig {
   title: string; // e.g. "Until I can finally hug you again."
   subtitle: string; // optional second line
   youtubeUrl: string; // YouTube link for background music
+  locationUrl: string; // Google Maps embed URL
+  completionMessage: string; // Message shown when countdown hits zero
   createdAt: string; // ISO timestamp — when config was first created
   updatedAt: string; // ISO timestamp — last save
 }

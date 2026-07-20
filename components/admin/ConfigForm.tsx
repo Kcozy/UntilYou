@@ -28,6 +28,8 @@ interface ConfigData {
   title: string;
   subtitle: string;
   youtubeUrl: string;
+  locationUrl: string;
+  completionMessage: string;
 }
 
 export function ConfigForm() {
@@ -38,6 +40,8 @@ export function ConfigForm() {
     title: "Until I can finally hug you again.",
     subtitle: "",
     youtubeUrl: "",
+    locationUrl: "",
+    completionMessage: "",
   });
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -60,6 +64,8 @@ export function ConfigForm() {
             title: data.config.title || "Until I can finally hug you again.",
             subtitle: data.config.subtitle || "",
             youtubeUrl: data.config.youtubeUrl || "",
+            locationUrl: data.config.locationUrl || "",
+            completionMessage: data.config.completionMessage || "",
           });
         }
       } catch (err) {
@@ -275,6 +281,57 @@ export function ConfigForm() {
               Paste any YouTube link. Audio plays when she clicks the music
               icon.
             </p>
+          </div>
+
+          {/* Location URL */}
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="locationUrl" style={labelStyles}>
+              Reunion Location (Google Maps)
+            </label>
+            <input
+              id="locationUrl"
+              type="text"
+              value={config.locationUrl}
+              onChange={(e) => {
+                let val = e.target.value;
+                // Auto-extract src if they paste an iframe snippet
+                const iframeMatch = val.match(/<iframe.*?src=["'](.*?)["']/);
+                if (iframeMatch && iframeMatch[1]) {
+                  val = iframeMatch[1];
+                }
+                setConfig((prev) => ({ ...prev, locationUrl: val }));
+              }}
+              placeholder="Paste Google Maps Embed URL or iframe code..."
+              className="w-full px-4 py-3 rounded-lg border outline-none transition-all duration-200 focus:border-[#C4A08A] focus:shadow-[0_0_0_3px_rgba(196,160,138,0.15)]"
+              style={inputStyles}
+            />
+            <p
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "0.72rem",
+                color: "#8A8078",
+              }}
+            >
+              On Google Maps, click "Share" → "Embed a map" and paste the code here.
+            </p>
+          </div>
+
+          {/* Completion Message */}
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="completionMessage" style={labelStyles}>
+              Completion Message
+            </label>
+            <textarea
+              id="completionMessage"
+              value={config.completionMessage}
+              onChange={(e) =>
+                setConfig((prev) => ({ ...prev, completionMessage: e.target.value }))
+              }
+              placeholder="I'm waiting right here for you."
+              rows={3}
+              className="w-full px-4 py-3 rounded-lg border outline-none transition-all duration-200 focus:border-[#C4A08A] focus:shadow-[0_0_0_3px_rgba(196,160,138,0.15)] resize-none"
+              style={inputStyles}
+            />
           </div>
 
           {/* Status message */}
